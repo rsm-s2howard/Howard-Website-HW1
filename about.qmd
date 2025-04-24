@@ -1,6 +1,6 @@
 ---
 title: "Sarah Howard"
-image: "files/IMG_5277.jpg"
+image: "docs/IMG_5277.jpg"
 about:
   template: jolla
   links:
