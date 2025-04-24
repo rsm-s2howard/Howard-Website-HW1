@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: docs$ touch .nojekyll
+  output-dir: docs
 website:
   title: "Sarah Howard"
   navbar:
