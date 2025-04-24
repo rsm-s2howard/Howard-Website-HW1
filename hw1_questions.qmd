@@ -171,32 +171,618 @@ First, I analyze whether matched donations lead to an increased response rate of
 ## 📊 Response Rate by Treatment Group
 
 We visualize whether being offered a matching donation affects the likelihood of donating. This barplot compares the donation response rate between the treatment and control groups.
-
 ```{python}
 import pandas as pd
+
+# Load the dataset (make sure the file is in the same directory as your notebook)
+df = pd.read_stata("karlan_list_2007.dta")
+
+# Take a quick look at the first few rows
+df.head()
+
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>treatment</th>
+      <th>control</th>
+      <th>ratio</th>
+      <th>ratio2</th>
+      <th>ratio3</th>
+      <th>size</th>
+      <th>size25</th>
+      <th>size50</th>
+      <th>size100</th>
+      <th>sizeno</th>
+      <th>...</th>
+      <th>redcty</th>
+      <th>bluecty</th>
+      <th>pwhite</th>
+      <th>pblack</th>
+      <th>page18_39</th>
+      <th>ave_hh_sz</th>
+      <th>median_hhincome</th>
+      <th>powner</th>
+      <th>psch_atlstba</th>
+      <th>pop_propurban</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>1</td>
+      <td>Control</td>
+      <td>0</td>
+      <td>0</td>
+      <td>Control</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.446493</td>
+      <td>0.527769</td>
+      <td>0.317591</td>
+      <td>2.10</td>
+      <td>28517.0</td>
+      <td>0.499807</td>
+      <td>0.324528</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>1</td>
+      <td>Control</td>
+      <td>0</td>
+      <td>0</td>
+      <td>Control</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>$100,000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.935706</td>
+      <td>0.011948</td>
+      <td>0.276128</td>
+      <td>2.48</td>
+      <td>51175.0</td>
+      <td>0.721941</td>
+      <td>0.192668</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>Unstated</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>...</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.888331</td>
+      <td>0.010760</td>
+      <td>0.279412</td>
+      <td>2.65</td>
+      <td>79269.0</td>
+      <td>0.920431</td>
+      <td>0.412142</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>$50,000</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.759014</td>
+      <td>0.127421</td>
+      <td>0.442389</td>
+      <td>1.85</td>
+      <td>40908.0</td>
+      <td>0.416072</td>
+      <td>0.439965</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 51 columns</p>
+</div>
+
+
+
+
+```{python}
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Load the dataset
-data_path = "karlan_list_2007.dta"  # Replace with correct relative path if needed
-df = pd.read_stata(data_path)
-
-# Compute donation rate by treatment group
+# Calculate the mean donation rate for each group
 donation_rates = df.groupby("treatment")["gave"].mean().reset_index()
 donation_rates["Group"] = donation_rates["treatment"].map({1: "Treatment", 0: "Control"})
 
-# Plot the barplot
+# Create the barplot
 plt.figure(figsize=(6, 4))
 sns.barplot(data=donation_rates, x="Group", y="gave", palette="Blues_d")
+
+# Label the chart
 plt.ylabel("Proportion Donated")
 plt.xlabel("Group")
 plt.title("Donation Response Rate: Treatment vs Control")
-plt.ylim(0, 0.03)
+plt.ylim(0, 0.03)  # Set y-axis range for visual clarity
+plt.tight_layout()
+
+# Show the plot
+plt.show()
+
+```
+
+    /tmp/ipykernel_1451/3587301648.py:10: FutureWarning: 
+    
+    Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `x` variable to `hue` and set `legend=False` for the same effect.
+    
+      sns.barplot(data=donation_rates, x="Group", y="gave", palette="Blues_d")
+
+
+
+    
+![png](output_1_1.png)
+    
+
+
+
+```{python}
+import pandas as pd
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+# Load the dataset
+df = pd.read_stata("karlan_list_2007.dta")
+
+# Prepare ratio indicators
+df["ratio"] = df["ratio"].astype("str")
+df["ratio1"] = (df["ratio"] == "1").astype(int)
+df["ratio2"] = (df["ratio"] == "2").astype(int)
+df["ratio3"] = (df["ratio"] == "3").astype(int)
+
+# Filter for treatment group only (exclude control group)
+df_treat_only = df[df["treatment"] == 1].copy()
+
+# T-tests: 1:1 vs 2:1 and 2:1 vs 3:1
+gave_1to1 = df_treat_only[df_treat_only["ratio1"] == 1]["gave"]
+gave_2to1 = df_treat_only[df_treat_only["ratio2"] == 1]["gave"]
+gave_3to1 = df_treat_only[df_treat_only["ratio3"] == 1]["gave"]
+
+t_1v2, p_1v2, _ = sm.stats.ttest_ind(gave_1to1, gave_2to1)
+t_2v3, p_2v3, _ = sm.stats.ttest_ind(gave_2to1, gave_3to1)
+
+# Regression using dummy variables
+reg_dummy = smf.ols("gave ~ ratio1 + ratio2 + ratio3 - 1", data=df_treat_only).fit()
+
+# Regression using categorical variable
+df_treat_only["ratio"] = df_treat_only["ratio"].astype("category")
+reg_cat = smf.ols("gave ~ C(ratio)", data=df_treat_only).fit()
+
+# Group means
+group_means = df_treat_only.groupby("ratio")["gave"].mean()
+direct_diff_1v2 = group_means["2"] - group_means["1"]
+direct_diff_2v3 = group_means["3"] - group_means["2"]
+
+# Regression differences
+coef_1 = reg_dummy.params["ratio1"]
+coef_2 = reg_dummy.params["ratio2"]
+coef_3 = reg_dummy.params["ratio3"]
+reg_diff_1v2 = coef_2 - coef_1
+reg_diff_2v3 = coef_3 - coef_2
+
+# Print summary
+print("T-test p-value (1:1 vs 2:1):", p_1v2)
+print("T-test p-value (2:1 vs 3:1):", p_2v3)
+print("Direct difference in response rates (2:1 - 1:1):", direct_diff_1v2)
+print("Direct difference in response rates (3:1 - 2:1):", direct_diff_2v3)
+print("Regression-based difference (2:1 - 1:1):", reg_diff_1v2)
+print("Regression-based difference (3:1 - 2:1):", reg_diff_2v3)
+
+# Optional: Show regression summaries
+print("\nOLS Regression with dummy variables:")
+print(reg_dummy.summary())
+
+print("\nOLS Regression with categorical variable:")
+print(reg_cat.summary())
+
+```
+
+    T-test p-value (1:1 vs 2:1): 0.3345316854972399
+    T-test p-value (2:1 vs 3:1): 0.9600305283739325
+    Direct difference in response rates (2:1 - 1:1): 0.0018842510217149944
+    Direct difference in response rates (3:1 - 2:1): 0.00010002398025293902
+    Regression-based difference (2:1 - 1:1): 0.0018842510217149805
+    Regression-based difference (3:1 - 2:1): 0.00010002398025296677
+    
+    OLS Regression with dummy variables:
+                                OLS Regression Results                            
+    ==============================================================================
+    Dep. Variable:                   gave   R-squared:                       0.000
+    Model:                            OLS   Adj. R-squared:                 -0.000
+    Method:                 Least Squares   F-statistic:                    0.6454
+    Date:                Thu, 24 Apr 2025   Prob (F-statistic):              0.524
+    Time:                        02:00:40   Log-Likelihood:                 16688.
+    No. Observations:               33396   AIC:                        -3.337e+04
+    Df Residuals:                   33393   BIC:                        -3.334e+04
+    Df Model:                           2                                         
+    Covariance Type:            nonrobust                                         
+    ==============================================================================
+                     coef    std err          t      P>|t|      [0.025      0.975]
+    ------------------------------------------------------------------------------
+    ratio1         0.0207      0.001     14.912      0.000       0.018       0.023
+    ratio2         0.0226      0.001     16.267      0.000       0.020       0.025
+    ratio3         0.0227      0.001     16.335      0.000       0.020       0.025
+    ==============================================================================
+    Omnibus:                    38963.957   Durbin-Watson:                   1.995
+    Prob(Omnibus):                  0.000   Jarque-Bera (JB):          2506478.937
+    Skew:                           6.511   Prob(JB):                         0.00
+    Kurtosis:                      43.394   Cond. No.                         1.00
+    ==============================================================================
+    
+    Notes:
+    [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+    
+    OLS Regression with categorical variable:
+                                OLS Regression Results                            
+    ==============================================================================
+    Dep. Variable:                   gave   R-squared:                       0.000
+    Model:                            OLS   Adj. R-squared:                 -0.000
+    Method:                 Least Squares   F-statistic:                    0.6454
+    Date:                Thu, 24 Apr 2025   Prob (F-statistic):              0.524
+    Time:                        02:00:40   Log-Likelihood:                 16688.
+    No. Observations:               33396   AIC:                        -3.337e+04
+    Df Residuals:                   33393   BIC:                        -3.334e+04
+    Df Model:                           2                                         
+    Covariance Type:            nonrobust                                         
+    =================================================================================
+                        coef    std err          t      P>|t|      [0.025      0.975]
+    ---------------------------------------------------------------------------------
+    Intercept         0.0207      0.001     14.912      0.000       0.018       0.023
+    C(ratio)[T.2]     0.0019      0.002      0.958      0.338      -0.002       0.006
+    C(ratio)[T.3]     0.0020      0.002      1.008      0.313      -0.002       0.006
+    ==============================================================================
+    Omnibus:                    38963.957   Durbin-Watson:                   1.995
+    Prob(Omnibus):                  0.000   Jarque-Bera (JB):          2506478.937
+    Skew:                           6.511   Prob(JB):                         0.00
+    Kurtosis:                      43.394   Cond. No.                         3.73
+    ==============================================================================
+    
+    Notes:
+    [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+
+    /tmp/ipykernel_1451/3381687197.py:33: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+      group_means = df_treat_only.groupby("ratio")["gave"].mean()
+
+
+## 🧪 Does Match Size Affect Donation Rates?
+
+We test whether offering larger match ratios (e.g., 2:1 or 3:1) increases the likelihood of donating compared to a standard 1:1 match.
+
+### 🔍 T-Test Results
+- **1:1 vs 2:1**: No statistically significant difference (p ≈ 0.335)
+- **2:1 vs 3:1**: No statistically significant difference (p ≈ 0.960)
+
+### 📈 Regression Results
+We ran two regressions:
+1. Using separate dummy variables (`ratio1`, `ratio2`, `ratio3`) — one for each match level
+2. Using a single categorical variable (`C(ratio)`)
+
+Both approaches yielded similar results:
+- **Donation rate for 1:1** ≈ 2.07%
+- **Donation rate for 2:1** ≈ 2.26%
+- **Donation rate for 3:1** ≈ 2.27%
+- Differences between them are **very small** and **not statistically significant**
+
+### 📊 Direct Comparison of Response Rates
+- **2:1 – 1:1** ≈ +0.19 percentage points
+- **3:1 – 2:1** ≈ +0.01 percentage points
+These findings match the regression results.
+
+### ✅ Conclusion
+These results support the authors’ observatin that
+"The figures suggest that larger match ratios have no additional impact."
+
+💡 **Key Insight**: Donors respond to the presence of a match, but **increasing the size of the match does not further increase the likelihood of donating**.
+
+
+
+```{python}
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Filter only those who made a donation
+df_donors = df[df["gave"] == 1]
+
+# Set up the plotting area
+plt.figure(figsize=(12, 5))
+
+# Histogram for Control Group
+plt.subplot(1, 2, 1)
+control_amounts = df_donors[df_donors["treatment"] == 0]["amount"]
+sns.histplot(control_amounts, bins=30, kde=False, color="skyblue")
+plt.axvline(control_amounts.mean(), color='red', linestyle='--', linewidth=2, label=f'Mean: ${control_amounts.mean():.2f}')
+plt.title("Donation Amounts - Control Group")
+plt.xlabel("Amount Donated")
+plt.ylabel("Number of Donors")
+plt.legend()
+
+# Histogram for Treatment Group
+plt.subplot(1, 2, 2)
+treatment_amounts = df_donors[df_donors["treatment"] == 1]["amount"]
+sns.histplot(treatment_amounts, bins=30, kde=False, color="lightgreen")
+plt.axvline(treatment_amounts.mean(), color='red', linestyle='--', linewidth=2, label=f'Mean: ${treatment_amounts.mean():.2f}')
+plt.title("Donation Amounts - Treatment Group")
+plt.xlabel("Amount Donated")
+plt.ylabel("Number of Donors")
+plt.legend()
+
+# Final layout
 plt.tight_layout()
 plt.show()
 
-quarto render data_analysis.ipynb
-```{embed}
-data_analysis.html
+```
 
+
+    
+![png](output_4_0.png)
+    
+
+
+## 💵 Size of Charitable Contribution
+
+### ✅ Q1: Does treatment affect donation amount (all individuals)?
+We performed both a **t-test** and a **bivariate linear regression** on the full dataset.
+
+- **T-test p-value**: ~0.063
+- **Regression coefficient**: +0.15 (Treatment vs. Control)
+- 📉 **Interpretation**: 
+  - The treatment group gave slightly more on average, but the difference is **not statistically significant at the 5% level**.
+  - This suggests that while the match offer encourages more people to donate, it does **not meaningfully affect how much they give**, on average, across the full sample.
+
+---
+
+### ✅ Q2: Does treatment affect donation amount *among donors only*?
+We repeated the analysis **only for individuals who made a donation** (i.e., `gave == 1`).
+
+- **T-test p-value**: ~0.561
+- **Regression coefficient**: –1.67
+- 📉 **Interpretation**:
+  - Among donors, there is **no statistically significant difference** in how much was donated between the treatment and control groups.
+  - Interestingly, the control group gave slightly more, but this difference is small and not reliable.
+  - ⚠️ **Causal Note**: This analysis **does not have a causal interpretation**, because it conditions on making a donation — a behavior affected by the treatment. This introduces **selection bias**.
+
+---
+
+### ✅ Q3: What do the histograms show?
+We created histograms of donation amounts **among donors**, separately for the treatment and control groups. Each plot includes:
+
+- A **red dashed line** indicating the mean donation.
+- The distributions are highly **right-skewed**, with many small gifts and a few large ones.
+
+📊 **Observations**:
+- The average donation amount is **very similar** across the groups.
+- Most donations are clustered around $10–$50.
+- There is **no visual evidence** that treatment led to larger donations.
+
+---
+
+### 🧠 Final Takeaway:
+Offering a **matching grant increases the probability of giving**, but among those who give, **it does not increase the amount given**. This suggests that match offers primarily work as a **participation nudge**, not a **generosity multiplier**.
+
+
+
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Set seed for reproducibility
+np.random.seed(42)
+
+# Simulate 10,000 Bernoulli trials
+control_draws = np.random.binomial(1, 0.018, size=10000)
+treatment_draws = np.random.binomial(1, 0.022, size=10000)
+
+# Calculate the difference at each draw
+differences = treatment_draws - control_draws
+
+# Compute the cumulative average of the differences
+cumulative_average = np.cumsum(differences) / np.arange(1, 10001)
+
+# Plot the cumulative average
+plt.figure(figsize=(10, 5))
+plt.plot(cumulative_average, label="Cumulative Average of Differences")
+plt.axhline(0.004, color="red", linestyle="--", label="True Treatment Effect (0.004)")
+plt.xlabel("Number of Simulations")
+plt.ylabel("Cumulative Average")
+plt.title("Law of Large Numbers: Cumulative Average of Treatment - Control")
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+```
+
+
+    
+![png](output_6_0.png)
+    
+
+
+## 📈 Law of Large Numbers: Simulating Donation Response Rates
+
+In this simulation, we illustrate the **Law of Large Numbers** using synthetic data inspired by the charitable giving experiment.
+
+### 🎯 Setup:
+- **Control Group**: Simulated with a Bernoulli distribution where the probability of donating is 1.8% (p = 0.018)
+- **Treatment Group**: Simulated with a Bernoulli distribution where the probability of donating is 2.2% (p = 0.022)
+- We simulate **10,000 draws** from each group and compute the **difference** (Treatment – Control) for each pair.
+- Then, we plot the **cumulative average** of those differences over time.
+
+### 📊 What the Graph Shows:
+- The line begins **noisy** due to early randomness.
+- As the number of draws increases, the average **stabilizes** and converges around the **true treatment effect** of **0.004** (2.2% - 1.8%).
+- The red dashed line marks this theoretical value.
+
+### 🧠 Interpretation:
+This visualization demonstrates the **Law of Large Numbers**:
+> As the sample size grows, the sample average of a statistic will converge to its true population value.
+
+This underlines why large-scale experiments (like the one in the Karlan & List paper) are powerful: with enough data, we can estimate effects reliably despite inherent randomness in individual behavior.
+
+
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set seed for reproducibility
+np.random.seed(42)
+
+# Function to simulate the distribution of mean differences
+def simulate_diff_distribution(sample_size, reps=1000):
+    differences = []
+    for _ in range(reps):
+        control_sample = np.random.binomial(1, 0.018, size=sample_size)
+        treatment_sample = np.random.binomial(1, 0.022, size=sample_size)
+        diff = treatment_sample.mean() - control_sample.mean()
+        differences.append(diff)
+    return differences
+
+# Sample sizes
+sample_sizes = [50, 200, 500, 1000]
+
+# Generate and plot each histogram separately
+for size in sample_sizes:
+    diffs = simulate_diff_distribution(sample_size=size)
+    plt.figure(figsize=(7, 4))
+    sns.histplot(diffs, bins=30, kde=False, color="skyblue")
+    plt.axvline(0.004, color='red', linestyle='--', linewidth=2, label="True Effect = 0.004")
+    plt.title(f"Sampling Distribution of Mean Differences (n = {size})")
+    plt.xlabel("Mean Difference (Treatment - Control)")
+    plt.ylabel("Frequency")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+```
+
+
+    
+![png](output_8_0.png)
+    
+
+
+
+    
+![png](output_8_1.png)
+    
+
+
+
+    
+![png](output_8_2.png)
+    
+
+
+
+    
+![png](output_8_3.png)
+    
+
+
+## 📊 Central Limit Theorem Demonstration
+
+This section visually demonstrates the **Central Limit Theorem (CLT)** using simulations based on the charitable giving experiment setup.
+
+### 🔬 Method:
+For each sample size — **n = 50, 200, 500, 1000**:
+1. We simulate 1,000 experiments.
+2. In each experiment:
+   - Take `n` samples from the **control group** (Bernoulli, p = 0.018)
+   - Take `n` samples from the **treatment group** (Bernoulli, p = 0.022)
+   - Compute the **average difference** in donation rates: `treatment_mean - control_mean`
+3. We plot the histogram of the 1,000 average differences.
+
+### 📈 Interpretation of Histograms:
+- For **n = 50**, the distribution is **wide and irregular** — highly affected by sampling noise.
+- As `n` increases (200, 500, 1000):
+  - The distribution becomes **tighter** and **smoother**
+  - It becomes **centered around the true effect** of **0.004** (shown by a red dashed line).
+  - The shape begins to resemble a **normal distribution**.
+
+### 🧠 Why It Matters:
+This simulation illustrates the **Central Limit Theorem**:
+> As sample size increases, the sampling distribution of the sample mean becomes approximately normal — even when the underlying data are not normally distributed.
+
+✅ **Takeaway**:  
+Thanks to the CLT, we can use normal-based inference methods (like t-tests and regression) when we have large enough samples — as in the Karlan & List field experiment.
 
