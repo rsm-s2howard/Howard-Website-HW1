@@ -1,6 +1,8 @@
 ---
 title: "A Replication of Karlan and List (2007)"
 author: "Sarah Howard"
+format: html
+jupyter: python3
 date: 23 April 2025
 callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
 ---
@@ -785,4 +787,6 @@ This simulation illustrates the **Central Limit Theorem**:
 
 ✅ **Takeaway**:  
 Thanks to the CLT, we can use normal-based inference methods (like t-tests and regression) when we have large enough samples — as in the Karlan & List field experiment.
+
+
 
