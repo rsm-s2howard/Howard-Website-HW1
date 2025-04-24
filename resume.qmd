@@ -9,6 +9,10 @@ about:
     - icon: linkedin
       href: linkedin.com/in/sarahdspalding
 ---
+title: "Resume"
+format:
+    hmtl: default
+    typst: default
 {{< pdf other_docs/Resume.pdf width= 100% height=800 >}}
 Welcome to my website!
 
