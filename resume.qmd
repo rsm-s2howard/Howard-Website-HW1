@@ -9,7 +9,6 @@ about:
     - icon: linkedin
       href: linkedin.com/in/sarahdspalding
 ---
-{{< other_docs/Resume.pdf >}}
-{{< other_docs/Resume.pdf width=100% height=800 >}}
-{{< other_docs/Resume.pdf image=IMG_5277.png >}}
+{{< pdf other_docs/Resume.pdf width= 100% height=800 >}}
 Welcome to my website!
+
