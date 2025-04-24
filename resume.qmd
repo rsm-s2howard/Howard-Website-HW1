@@ -11,5 +11,5 @@ about:
 ---
 {{< Resume.pdf >}}
 {{< Resume.pdf width=100% height=800 >}}
-{{< Resume.pdf image=dummy.png >}}
+{{< Resume.pdf image=IMG_5277.png >}}
 Welcome to my website!
