@@ -1,0 +1,13 @@
+---
+title: "Sarah Howard"
+image: "files/IMG_5277.jpg"
+about:
+  template: jolla
+  links:
+    - icon: envelope
+      href: mailto:s2howard@ucsd.edu
+    - icon: linkedin
+      href: linkedin.com/in/sarahdspalding
+---
+
+Welcome to my website!
