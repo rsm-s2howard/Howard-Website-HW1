@@ -10,7 +10,7 @@ website:
       - href: resume.qmd
         text: Resume
       - href: hw1_questions.qmd
-        text: hw1_questions
+        text: HW1 Questions
 
 format:
   html:
