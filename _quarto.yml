@@ -5,13 +5,12 @@ website:
   title: "Sarah Howard"
   navbar:
     left:
-      - href:hw1_questions.qmd
-        text: hw1_questions
       - href: index.qmd
         text: Home
       - href: resume.qmd
         text: Resume
-      -
+      - href: hw1_questions.qmd
+        text: hw1_questions
 
 format:
   html:
