@@ -11,6 +11,8 @@ website:
         text: Resume
       - href: hw1_questions.qmd
         text: HW1 Questions
+      - href: hw2_questions.qmd
+        text: HW2 Questions
 
 format:
   html:
