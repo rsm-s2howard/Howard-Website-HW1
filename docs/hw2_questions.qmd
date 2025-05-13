@@ -1,7 +1,7 @@
 ---
 title: "Poisson Regression Examples"
-author: "Your Name"
-date: today
+author: "Sarah Howard"
+date: 12 May 2025
 callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
 ---
 
@@ -99,7 +99,7 @@ AirBnB is a popular platform for booking short-term rentals. In March 2017, stud
 
 _todo: Assume the number of reviews is a good proxy for the number of bookings. Perform some exploratory data analysis to get a feel for the data, handle or drop observations with missing values on relevant variables, build one or more models (e.g., a poisson regression model for the number of bookings as proxied by the number of reviews), and interpret model coefficients to describe variation in the number of reviews as a function of the variables provided._
 
-quarto render hw2_questions.qmd
+quarto render Hmwk_2_Answers.ipynb
 
 
 
