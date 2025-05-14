@@ -527,28 +527,35 @@ Y_i \sim \text{Poisson}(\lambda_i), \quad \text{where } \lambda_i = \exp(X_i^\to
 </section>
 <section id="airbnb-case-study" class="level2">
 <h2 class="anchored" data-anchor-id="airbnb-case-study">AirBnB Case Study</h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>airbnb_df <span class="op">=</span> pd.read_csv(<span class="st">"airbnb.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>airbnb_clean <span class="op">=</span> airbnb_df.copy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<section id="interpretation-of-poisson-regression-results" class="level3">
-<h3 class="anchored" data-anchor-id="interpretation-of-poisson-regression-results">📋 Interpretation of Poisson Regression Results</h3>
-<p>We modeled the number of reviews a listing receives (used as a proxy for the number of bookings) using a Poisson regression model. The predictors included:</p>
-<ul>
-<li>Number of days listed on the platform (<code>days</code>)</li>
-<li>Number of bathrooms and bedrooms</li>
-<li>Review scores for cleanliness, location, and value</li>
-<li>Whether the listing is instantly bookable</li>
-<li>Price (standardized)</li>
-<li>Room type (Private and Shared rooms, with Entire home/apt as the reference category)</li>
-</ul>
-<hr>
+<p>#| label: airbnb-clean-data #| echo: true import pandas as pd import numpy as np from sklearn.preprocessing import StandardScaler</p>
 </section>
-<section id="key-results" class="level3">
-<h3 class="anchored" data-anchor-id="key-results">🧾 Key Results</h3>
-<ul>
-<li><strong>Intercept</strong></li>
-</ul>
+<section id="load-the-dataset" class="level1">
+<h1>Load the dataset</h1>
+<p>airbnb_df = pd.read_csv(“airbnb.csv”) airbnb_clean = airbnb_df.copy()</p>
 </section>
+<section id="drop-rows-with-missing-values-in-relevant-variables" class="level1">
+<h1>Drop rows with missing values in relevant variables</h1>
+<p>key_vars = [ ‘number_of_reviews’, ‘days’, ‘room_type’, ‘bathrooms’, ‘bedrooms’, ‘review_scores_cleanliness’, ‘review_scores_location’, ‘review_scores_value’, ‘instant_bookable’, ‘price’] airbnb_clean = airbnb_clean.dropna(subset=key_vars)</p>
+</section>
+<section id="convert-instant_bookable-to-binary" class="level1">
+<h1>Convert ‘instant_bookable’ to binary</h1>
+<p>airbnb_clean[‘instant_bookable’] = (airbnb_clean[‘instant_bookable’] == ‘t’).astype(int)</p>
+</section>
+<section id="create-dummy-variables-for-room_type" class="level1">
+<h1>Create dummy variables for room_type</h1>
+<p>room_dummies = pd.get_dummies(airbnb_clean[‘room_type’], drop_first=True)</p>
+</section>
+<section id="build-design-matrix" class="level1">
+<h1>Build design matrix</h1>
+<p>X = pd.concat([ airbnb_clean[[‘days’, ‘bathrooms’, ‘bedrooms’, ‘review_scores_cleanliness’, ‘review_scores_location’, ‘review_scores_value’, ‘instant_bookable’, ‘price’]], room_dummies], axis=1) X.insert(0, ‘intercept’, 1.0)</p>
+</section>
+<section id="standardize-numeric-predictors" class="level1">
+<h1>Standardize numeric predictors</h1>
+<p>continuous_vars = [‘days’, ‘bathrooms’, ‘bedrooms’, ‘review_scores_cleanliness’, ‘review_scores_location’, ‘review_scores_value’, ‘price’] scaler = StandardScaler() X[continuous_vars] = scaler.fit_transform(X[continuous_vars])</p>
+</section>
+<section id="convert-to-numpy-arrays" class="level1">
+<h1>Convert to numpy arrays</h1>
+<p>X_np = X.values Y = airbnb_clean[‘number_of_reviews’].values beta_init = np.zeros(X_np.shape[1])</p>
 </section>
 
 </main>

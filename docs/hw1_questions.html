@@ -139,6 +139,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link active" href="./hw1_questions.html" aria-current="page"> 
 <span class="menu-text">HW1 Questions</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./hw2_questions.qmd"> 
+<span class="menu-text">HW2 Questions</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -641,7 +645,7 @@ This is the purpose of <strong>Table 1</strong> in the paper: to demonstrate tha
 <section id="response-rate-by-treatment-group" class="level2">
 <h2 class="anchored" data-anchor-id="response-rate-by-treatment-group">📊 Response Rate by Treatment Group</h2>
 <p>We visualize whether being offered a matching donation affects the likelihood of donating. This barplot compares the donation response rate between the treatment and control groups.</p>
-<div id="185e3827" class="cell" data-execution_count="1">
+<div id="58bd89e7" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the dataset (make sure the file is in the same directory as your notebook)</span></span>
@@ -649,7 +653,7 @@ This is the purpose of <strong>Table 1</strong> in the paper: to demonstrate tha
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Take a quick look at the first few rows</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="1">
 <div>
 
 
@@ -1227,7 +1231,7 @@ $50,000
 5 rows × 51 columns
 </p>
 </div>
-<div id="95a58a4b" class="cell" data-execution_count="2">
+<div id="7ad50c76" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1249,7 +1253,7 @@ $50,000
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the plot</span></span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_2146/1362242253.py:10: FutureWarning:
+<pre><code>/tmp/ipykernel_88776/1362242253.py:10: FutureWarning:
 
 
 
@@ -1276,7 +1280,7 @@ Passing `palette` without assigning `hue` is deprecated and will be removed in v
 <figcaption>png</figcaption>
 </figure>
 </div>
-<div id="da819aa4" class="cell" data-execution_count="3">
+<div id="a0e1b36a" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
@@ -1348,8 +1352,8 @@ OLS Regression with dummy variables:
 Dep. Variable:                   gave   R-squared:                       0.000
 Model:                            OLS   Adj. R-squared:                 -0.000
 Method:                 Least Squares   F-statistic:                    0.6454
-Date:                Thu, 24 Apr 2025   Prob (F-statistic):              0.524
-Time:                        03:41:39   Log-Likelihood:                 16688.
+Date:                Wed, 14 May 2025   Prob (F-statistic):              0.524
+Time:                        12:18:14   Log-Likelihood:                 16688.
 No. Observations:               33396   AIC:                        -3.337e+04
 Df Residuals:                   33393   BIC:                        -3.334e+04
 Df Model:                           2                                         
@@ -1376,8 +1380,8 @@ OLS Regression with categorical variable:
 Dep. Variable:                   gave   R-squared:                       0.000
 Model:                            OLS   Adj. R-squared:                 -0.000
 Method:                 Least Squares   F-statistic:                    0.6454
-Date:                Thu, 24 Apr 2025   Prob (F-statistic):              0.524
-Time:                        03:41:39   Log-Likelihood:                 16688.
+Date:                Wed, 14 May 2025   Prob (F-statistic):              0.524
+Time:                        12:18:14   Log-Likelihood:                 16688.
 No. Observations:               33396   AIC:                        -3.337e+04
 Df Residuals:                   33393   BIC:                        -3.334e+04
 Df Model:                           2                                         
@@ -1399,7 +1403,7 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_2146/2038281865.py:33: FutureWarning:
+<pre><code>/tmp/ipykernel_88776/2038281865.py:33: FutureWarning:
 
 The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
 </code></pre>
@@ -1498,7 +1502,7 @@ Notes:
 <h3 class="anchored" data-anchor-id="conclusion">✅ Conclusion</h3>
 <p>These results support the authors’ observatin that “The figures suggest that larger match ratios have no additional impact.”</p>
 <p>💡 <strong>Key Insight</strong>: Donors respond to the presence of a match, but <strong>increasing the size of the match does not further increase the likelihood of donating</strong>.</p>
-<div id="59b287d6" class="cell" data-execution_count="4">
+<div id="4ec8468f" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>

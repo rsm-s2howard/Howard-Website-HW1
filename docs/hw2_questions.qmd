@@ -387,37 +387,50 @@ The coefficient on `iscustomer` is approximately **0.208**, and is statistically
 
 
 ## AirBnB Case Study
-
-```python
+#| label: airbnb-clean-data
+#| echo: true
 import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+
+# Load the dataset
 airbnb_df = pd.read_csv("airbnb.csv")
-
-```
-
-
-```python
 airbnb_clean = airbnb_df.copy()
 
-```
+# Drop rows with missing values in relevant variables
+key_vars = [
+    'number_of_reviews', 'days', 'room_type', 'bathrooms', 'bedrooms',
+    'review_scores_cleanliness', 'review_scores_location',
+    'review_scores_value', 'instant_bookable', 'price'
+]
+airbnb_clean = airbnb_clean.dropna(subset=key_vars)
 
-### 📋 Interpretation of Poisson Regression Results
+# Convert 'instant_bookable' to binary
+airbnb_clean['instant_bookable'] = (airbnb_clean['instant_bookable'] == 't').astype(int)
 
-We modeled the number of reviews a listing receives (used as a proxy for the number of bookings) using a Poisson regression model. The predictors included:
+# Create dummy variables for room_type
+room_dummies = pd.get_dummies(airbnb_clean['room_type'], drop_first=True)
 
-- Number of days listed on the platform (`days`)
-- Number of bathrooms and bedrooms
-- Review scores for cleanliness, location, and value
-- Whether the listing is instantly bookable
-- Price (standardized)
-- Room type (Private and Shared rooms, with Entire home/apt as the reference category)
+# Build design matrix
+X = pd.concat([
+    airbnb_clean[['days', 'bathrooms', 'bedrooms',
+                  'review_scores_cleanliness', 'review_scores_location',
+                  'review_scores_value', 'instant_bookable', 'price']],
+    room_dummies
+], axis=1)
+X.insert(0, 'intercept', 1.0)
 
----
+# Standardize numeric predictors
+continuous_vars = ['days', 'bathrooms', 'bedrooms',
+                   'review_scores_cleanliness', 'review_scores_location',
+                   'review_scores_value', 'price']
+scaler = StandardScaler()
+X[continuous_vars] = scaler.fit_transform(X[continuous_vars])
 
-### 🧾 Key Results
-
-- **Intercept**
-
-
+# Convert to numpy arrays
+X_np = X.values
+Y = airbnb_clean['number_of_reviews'].values
+beta_init = np.zeros(X_np.shape[1])
 
 
 
