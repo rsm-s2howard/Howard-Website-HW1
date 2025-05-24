@@ -527,35 +527,74 @@ Y_i \sim \text{Poisson}(\lambda_i), \quad \text{where } \lambda_i = \exp(X_i^\to
 </section>
 <section id="airbnb-case-study" class="level2">
 <h2 class="anchored" data-anchor-id="airbnb-case-study">AirBnB Case Study</h2>
-<p>#| label: airbnb-clean-data #| echo: true import pandas as pd import numpy as np from sklearn.preprocessing import StandardScaler</p>
+<section id="introduction" class="level3">
+<h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
+<p>AirBnB is a popular platform for booking short-term rentals. In March 2017, students Annika Awad, Evan Lebo, and Anna Linden scraped data from 40,000 Airbnb listings in New York City. The dataset includes variables such as room type, price, number of reviews, and review scores.</p>
+<p>We assume that the number of reviews is a good proxy for the number of bookings. In this analysis, we conduct exploratory data analysis (EDA), clean the dataset, fit a Poisson regression model, and interpret the results.</p>
 </section>
-<section id="load-the-dataset" class="level1">
-<h1>Load the dataset</h1>
-<p>airbnb_df = pd.read_csv(“airbnb.csv”) airbnb_clean = airbnb_df.copy()</p>
+<section id="data-cleaning" class="level3">
+<h3 class="anchored" data-anchor-id="data-cleaning">Data Cleaning</h3>
+<p>We removed rows with missing values in key variables: number of reviews, room type, bathrooms, bedrooms, days listed, price, review scores (cleanliness, location, value), and instant bookability. The cleaned dataset includes 30,160 listings.</p>
 </section>
-<section id="drop-rows-with-missing-values-in-relevant-variables" class="level1">
-<h1>Drop rows with missing values in relevant variables</h1>
-<p>key_vars = [ ‘number_of_reviews’, ‘days’, ‘room_type’, ‘bathrooms’, ‘bedrooms’, ‘review_scores_cleanliness’, ‘review_scores_location’, ‘review_scores_value’, ‘instant_bookable’, ‘price’] airbnb_clean = airbnb_clean.dropna(subset=key_vars)</p>
+<section id="exploratory-data-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h3>
+<ul>
+<li><strong>Number of Reviews</strong>: Highly right-skewed, ranging from 1 to 421.</li>
+<li><strong>Room Type</strong>: Entire homes/apt receive the most reviews on average, followed by private rooms and then shared rooms.</li>
+<li><strong>Price</strong>: Weak negative relationship with review count. Cheaper listings tend to receive more reviews.</li>
+</ul>
+<section id="visualizations" class="level4">
+<h4 class="anchored" data-anchor-id="visualizations">Visualizations</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="distribution_reviews.png" class="img-fluid figure-img"></p>
+<figcaption>Distribution of Number of Reviews</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="reviews_by_room_type.png" class="img-fluid figure-img"></p>
+<figcaption>Number of Reviews by Room Type</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="reviews_vs_price.png" class="img-fluid figure-img"></p>
+<figcaption>Number of Reviews vs.&nbsp;Price</figcaption>
+</figure>
+</div>
 </section>
-<section id="convert-instant_bookable-to-binary" class="level1">
-<h1>Convert ‘instant_bookable’ to binary</h1>
-<p>airbnb_clean[‘instant_bookable’] = (airbnb_clean[‘instant_bookable’] == ‘t’).astype(int)</p>
 </section>
-<section id="create-dummy-variables-for-room_type" class="level1">
-<h1>Create dummy variables for room_type</h1>
-<p>room_dummies = pd.get_dummies(airbnb_clean[‘room_type’], drop_first=True)</p>
+<section id="poisson-regression-model" class="level3">
+<h3 class="anchored" data-anchor-id="poisson-regression-model">Poisson Regression Model</h3>
+<p>We model the number of reviews using a Poisson regression:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>number_of_reviews <span class="sc">~</span> <span class="fu">C</span>(room_type) <span class="sc">+</span> bathrooms <span class="sc">+</span> bedrooms <span class="sc">+</span> days <span class="sc">+</span> price <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                    review_scores_cleanliness <span class="sc">+</span> review_scores_location <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                    review_scores_value <span class="sc">+</span> instant_bookable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="key-coefficients" class="level4">
+<h4 class="anchored" data-anchor-id="key-coefficients">Key Coefficients:</h4>
+<ul>
+<li><strong>Private room</strong>: 1% fewer reviews than entire homes (small effect)</li>
+<li><strong>Shared room</strong>: ~22% fewer reviews</li>
+<li><strong>Bathrooms</strong>: More bathrooms are associated with ~11% fewer reviews</li>
+<li><strong>Bedrooms</strong>: Each additional bedroom increases reviews by ~7%</li>
+<li><strong>Days listed</strong>: Longer listing time strongly increases reviews</li>
+<li><strong>Price</strong>: Slight negative effect</li>
+<li><strong>Cleanliness Score</strong>: Strong positive effect (~11% increase per unit)</li>
+<li><strong>Location &amp; Value Scores</strong>: Unexpected negative effects (may suggest multicollinearity)</li>
+<li><strong>Instant Bookable</strong>: ~41% more reviews (<code>exp(0.3459) \approx 1.41</code>)</li>
+</ul>
 </section>
-<section id="build-design-matrix" class="level1">
-<h1>Build design matrix</h1>
-<p>X = pd.concat([ airbnb_clean[[‘days’, ‘bathrooms’, ‘bedrooms’, ‘review_scores_cleanliness’, ‘review_scores_location’, ‘review_scores_value’, ‘instant_bookable’, ‘price’]], room_dummies], axis=1) X.insert(0, ‘intercept’, 1.0)</p>
 </section>
-<section id="standardize-numeric-predictors" class="level1">
-<h1>Standardize numeric predictors</h1>
-<p>continuous_vars = [‘days’, ‘bathrooms’, ‘bedrooms’, ‘review_scores_cleanliness’, ‘review_scores_location’, ‘review_scores_value’, ‘price’] scaler = StandardScaler() X[continuous_vars] = scaler.fit_transform(X[continuous_vars])</p>
+<section id="interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation">Interpretation</h3>
+<ul>
+<li>Listings that are older, cheaper, and allow instant booking receive more reviews.</li>
+<li>Cleanliness plays a major role in guest satisfaction and bookings.</li>
+<li>More bedrooms generally mean more reviews, while more bathrooms might be a confounding factor.</li>
+<li>Review score effects may benefit from further investigation with interaction terms or alternative model specifications.</li>
+</ul>
 </section>
-<section id="convert-to-numpy-arrays" class="level1">
-<h1>Convert to numpy arrays</h1>
-<p>X_np = X.values Y = airbnb_clean[‘number_of_reviews’].values beta_init = np.zeros(X_np.shape[1])</p>
 </section>
 
 </main>
