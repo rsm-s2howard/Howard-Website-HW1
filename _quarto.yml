@@ -14,7 +14,7 @@ website:
       - href: hw2_questions.qmd
         text: HW2 Questions
       - href: mnl_estimation.qmd
-        text: HW3 
+        text: HW3 Questions
 
 format:
   html:
