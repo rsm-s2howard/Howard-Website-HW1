@@ -104,3 +104,4 @@ Results are consistent with MLE, validating the Bayesian approach.
 - Model respondent-level parameters: $\beta_i \sim \mathcal{N}(\mu, \Sigma)$
 - Estimate hyperparameters $(\mu, \Sigma)$ across individuals.
 - This captures preference heterogeneity and is common in real-world conjoint analysis.
+/home/jovyan/git/MGTA 495 MARKETING ANALYTICS-howard/hw2_questions_files/libs
