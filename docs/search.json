@@ -166,5 +166,54 @@
     "title": "Poisson Regression Examples",
     "section": "AirBnB Case Study",
     "text": "AirBnB Case Study\n\nIntroduction\nAirBnB is a popular platform for booking short-term rentals. In March 2017, students Annika Awad, Evan Lebo, and Anna Linden scraped of 40,000 Airbnb listings from New York City. The data include the following variables:\n\n\n\n\n\n\nVariable Definitions\n\n\n\n\n\n- `id` = unique ID number for each unit\n- `last_scraped` = date when information scraped\n- `host_since` = date when host first listed the unit on Airbnb\n- `days` = `last_scraped` - `host_since` = number of days the unit has been listed\n- `room_type` = Entire home/apt., Private room, or Shared room\n- `bathrooms` = number of bathrooms\n- `bedrooms` = number of bedrooms\n- `price` = price per night (dollars)\n- `number_of_reviews` = number of reviews for the unit on Airbnb\n- `review_scores_cleanliness` = a cleanliness score from reviews (1-10)\n- `review_scores_location` = a \"quality of location\" score from reviews (1-10)\n- `review_scores_value` = a \"quality of value\" score from reviews (1-10)\n- `instant_bookable` = \"t\" if instantly bookable, \"f\" if not\n\n\n\ntodo: Assume the number of reviews is a good proxy for the number of bookings. Perform some exploratory data analysis to get a feel for the data, handle or drop observations with missing values on relevant variables, build one or more models (e.g., a poisson regression model for the number of bookings as proxied by the number of reviews), and interpret model coefficients to describe variation in the number of reviews as a function of the variables provided.\nquarto render hw2_questions.qmd"
+  },
+  {
+    "objectID": "mnl_estimation.html",
+    "href": "mnl_estimation.html",
+    "title": "Multinomial Logit Model Estimation",
+    "section": "",
+    "text": "We assume each individual selects the product with the highest utility. Given the utility specification:\n\\[\nU_{ij} = x_j'\\beta + \\epsilon_{ij}\n\\]\nand assuming \\(\\epsilon_{ij} \\sim \\text{i.i.d. Extreme Value}\\), the choice probability for product \\(j\\) is:\n\\[\n\\mathbb{P}_i(j) = \\frac{e^{x_j'\\beta}}{\\sum_{k=1}^J e^{x_k'\\beta}}\n\\]\nThe likelihood for individual \\(i\\) is:\n\\[\nL_i(\\beta) = \\prod_{j=1}^J \\mathbb{P}_i(j)^{\\delta_{ij}}\n\\]\nThe joint log-likelihood over all individuals is:\n\\[\n\\ell_n(\\beta) = \\sum_{i=1}^n \\sum_{j=1}^J \\delta_{ij} \\log(\\mathbb{P}_i(j))\n\\]"
+  },
+  {
+    "objectID": "mnl_estimation.html#likelihood-for-the-multinomial-logit-mnl-model",
+    "href": "mnl_estimation.html#likelihood-for-the-multinomial-logit-mnl-model",
+    "title": "Multinomial Logit Model Estimation",
+    "section": "",
+    "text": "We assume each individual selects the product with the highest utility. Given the utility specification:\n\\[\nU_{ij} = x_j'\\beta + \\epsilon_{ij}\n\\]\nand assuming \\(\\epsilon_{ij} \\sim \\text{i.i.d. Extreme Value}\\), the choice probability for product \\(j\\) is:\n\\[\n\\mathbb{P}_i(j) = \\frac{e^{x_j'\\beta}}{\\sum_{k=1}^J e^{x_k'\\beta}}\n\\]\nThe likelihood for individual \\(i\\) is:\n\\[\nL_i(\\beta) = \\prod_{j=1}^J \\mathbb{P}_i(j)^{\\delta_{ij}}\n\\]\nThe joint log-likelihood over all individuals is:\n\\[\n\\ell_n(\\beta) = \\sum_{i=1}^n \\sum_{j=1}^J \\delta_{ij} \\log(\\mathbb{P}_i(j))\n\\]"
+  },
+  {
+    "objectID": "mnl_estimation.html#simulate-conjoint-data",
+    "href": "mnl_estimation.html#simulate-conjoint-data",
+    "title": "Multinomial Logit Model Estimation",
+    "section": "2. Simulate Conjoint Data",
+    "text": "2. Simulate Conjoint Data\nWe simulate data for 100 respondents, each completing 10 choice tasks with 3 options. Attributes:\n\nBrand: Netflix, Prime, Hulu\nAds: Yes or No\nPrice: $8–$32\n\nTrue utilities:\n\n\\(\\beta_{\\text{Netflix}} = 1.0\\)\n\\(\\beta_{\\text{Prime}} = 0.5\\)\n\\(\\beta_{\\text{Ads}} = -0.8\\)\n\\(\\beta_{\\text{Price}} = -0.1\\)\n\nChoices are made by selecting the option with the highest utility, including Gumbel-distributed error."
+  },
+  {
+    "objectID": "mnl_estimation.html#preparing-the-data-for-estimation",
+    "href": "mnl_estimation.html#preparing-the-data-for-estimation",
+    "title": "Multinomial Logit Model Estimation",
+    "section": "3. Preparing the Data for Estimation",
+    "text": "3. Preparing the Data for Estimation\n\nDummy variables were created for brand_N, brand_P, and ad_yes.\nbrand_H and ad_No are baseline categories.\nData was transformed into long format (each row = one alternative).\nGrouping by respondent and task is used for likelihood evaluation."
+  },
+  {
+    "objectID": "mnl_estimation.html#estimation-via-maximum-likelihood",
+    "href": "mnl_estimation.html#estimation-via-maximum-likelihood",
+    "title": "Multinomial Logit Model Estimation",
+    "section": "4. Estimation via Maximum Likelihood",
+    "text": "4. Estimation via Maximum Likelihood\nMLEs using scipy.optimize.minimize():\n\n\n\nParameter\nEstimate\nStd. Error\n95% CI\n\n\n\n\n\\(\\beta_{\\text{Netflix}}\\)\n0.94\n0.10\n[0.74, 1.14]\n\n\n\\(\\beta_{\\text{Prime}}\\)\n0.50\n0.11\n[0.29, 0.71]\n\n\n\\(\\beta_{\\text{Ads}}\\)\n-0.73\n0.09\n[-0.90, -0.56]\n\n\n\\(\\beta_{\\text{Price}}\\)\n-0.10\n0.01\n[-0.11, -0.09]\n\n\n\nThese results align with the true simulation values."
+  },
+  {
+    "objectID": "mnl_estimation.html#estimation-via-bayesian-methods",
+    "href": "mnl_estimation.html#estimation-via-bayesian-methods",
+    "title": "Multinomial Logit Model Estimation",
+    "section": "5. Estimation via Bayesian Methods",
+    "text": "5. Estimation via Bayesian Methods\nUsing Metropolis-Hastings with: - Priors: \\(\\mathcal{N}(0,5)\\) for dummies; \\(\\mathcal{N}(0,1)\\) for price - Proposal SD: [0.05, 0.05, 0.05, 0.005] - 2,000 iterations, 500 burn-in\nPosterior summary:\n\n\n\n\n\n\n\n\n\nParameter\nPosterior Mean\nStd. Dev.\n95% Credible Interval\n\n\n\n\n\\(\\beta_{\\text{Netflix}}\\)\n0.94\n0.11\n[0.74, 1.15]\n\n\n\\(\\beta_{\\text{Prime}}\\)\n0.50\n0.11\n[0.28, 0.71]\n\n\n\\(\\beta_{\\text{Ads}}\\)\n-0.72\n0.09\n[-0.88, -0.54]\n\n\n\\(\\beta_{\\text{Price}}\\)\n-0.10\n0.01\n[-0.11, -0.09]\n\n\n\nResults are consistent with MLE, validating the Bayesian approach."
+  },
+  {
+    "objectID": "mnl_estimation.html#discussion",
+    "href": "mnl_estimation.html#discussion",
+    "title": "Multinomial Logit Model Estimation",
+    "section": "6. Discussion",
+    "text": "6. Discussion\n\na. Parameter Interpretation\n\n\\(\\beta_{\\text{Netflix}} &gt; \\beta_{\\text{Prime}}\\) implies respondents prefer Netflix to Prime.\nA negative \\(\\beta_{\\text{Price}}\\) reflects rational behavior: higher prices lower utility.\n\n\n\nb. Real-World Estimation (No Simulation)\n\nAssess model fit with predictive accuracy.\nPosterior intervals help assess uncertainty in estimates.\n\n\n\nc. Extension to Hierarchical Bayes\n\nModel respondent-level parameters: \\(\\beta_i \\sim \\mathcal{N}(\\mu, \\Sigma)\\)\nEstimate hyperparameters \\((\\mu, \\Sigma)\\) across individuals.\nThis captures preference heterogeneity and is common in real-world conjoint analysis."
   }
 ]
