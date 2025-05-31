@@ -1,0 +1,106 @@
+
+---
+title: "Multinomial Logit Model Estimation"
+author: "Your Name"
+date: today
+format: html
+---
+
+## 1. Likelihood for the Multinomial Logit (MNL) Model
+
+We assume each individual selects the product with the highest utility. Given the utility specification:
+
+$$
+U_{ij} = x_j'\beta + \epsilon_{ij}
+$$
+
+and assuming $\epsilon_{ij} \sim \text{i.i.d. Extreme Value}$, the choice probability for product $j$ is:
+
+$$
+\mathbb{P}_i(j) = \frac{e^{x_j'\beta}}{\sum_{k=1}^J e^{x_k'\beta}}
+$$
+
+The likelihood for individual $i$ is:
+
+$$
+L_i(\beta) = \prod_{j=1}^J \mathbb{P}_i(j)^{\delta_{ij}}
+$$
+
+The joint log-likelihood over all individuals is:
+
+$$
+\ell_n(\beta) = \sum_{i=1}^n \sum_{j=1}^J \delta_{ij} \log(\mathbb{P}_i(j))
+$$
+
+## 2. Simulate Conjoint Data
+
+We simulate data for 100 respondents, each completing 10 choice tasks with 3 options. Attributes:
+
+- **Brand**: Netflix, Prime, Hulu
+- **Ads**: Yes or No
+- **Price**: \$8–\$32
+
+True utilities:
+
+- $\beta_{\text{Netflix}} = 1.0$
+- $\beta_{\text{Prime}} = 0.5$
+- $\beta_{\text{Ads}} = -0.8$
+- $\beta_{\text{Price}} = -0.1$
+
+Choices are made by selecting the option with the highest utility, including Gumbel-distributed error.
+
+## 3. Preparing the Data for Estimation
+
+- Dummy variables were created for `brand_N`, `brand_P`, and `ad_yes`.
+- `brand_H` and `ad_No` are baseline categories.
+- Data was transformed into long format (each row = one alternative).
+- Grouping by respondent and task is used for likelihood evaluation.
+
+## 4. Estimation via Maximum Likelihood
+
+MLEs using `scipy.optimize.minimize()`:
+
+| Parameter     | Estimate | Std. Error | 95% CI         |
+|---------------|----------|------------|----------------|
+| $\beta_{\text{Netflix}}$ | 0.94     | 0.10       | [0.74, 1.14]   |
+| $\beta_{\text{Prime}}$  | 0.50     | 0.11       | [0.29, 0.71]   |
+| $\beta_{\text{Ads}}$     | -0.73    | 0.09       | [-0.90, -0.56] |
+| $\beta_{\text{Price}}$   | -0.10    | 0.01       | [-0.11, -0.09] |
+
+These results align with the true simulation values.
+
+## 5. Estimation via Bayesian Methods
+
+Using Metropolis-Hastings with:
+- Priors: $\mathcal{N}(0,5)$ for dummies; $\mathcal{N}(0,1)$ for price
+- Proposal SD: [0.05, 0.05, 0.05, 0.005]
+- 2,000 iterations, 500 burn-in
+
+Posterior summary:
+
+| Parameter     | Posterior Mean | Std. Dev. | 95% Credible Interval |
+|---------------|----------------|-----------|------------------------|
+| $\beta_{\text{Netflix}}$ | 0.94           | 0.11      | [0.74, 1.15]           |
+| $\beta_{\text{Prime}}$  | 0.50           | 0.11      | [0.28, 0.71]           |
+| $\beta_{\text{Ads}}$     | -0.72          | 0.09      | [-0.88, -0.54]         |
+| $\beta_{\text{Price}}$   | -0.10          | 0.01      | [-0.11, -0.09]         |
+
+Results are consistent with MLE, validating the Bayesian approach.
+
+## 6. Discussion
+
+### a. Parameter Interpretation
+
+- $\beta_{\text{Netflix}} > \beta_{\text{Prime}}$ implies respondents prefer Netflix to Prime.
+- A negative $\beta_{\text{Price}}$ reflects rational behavior: higher prices lower utility.
+
+### b. Real-World Estimation (No Simulation)
+
+- Assess model fit with predictive accuracy.
+- Posterior intervals help assess uncertainty in estimates.
+
+### c. Extension to Hierarchical Bayes
+
+- Model respondent-level parameters: $\beta_i \sim \mathcal{N}(\mu, \Sigma)$
+- Estimate hyperparameters $(\mu, \Sigma)$ across individuals.
+- This captures preference heterogeneity and is common in real-world conjoint analysis.

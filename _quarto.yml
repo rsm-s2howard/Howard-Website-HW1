@@ -13,6 +13,8 @@ website:
         text: HW1 Questions
       - href: hw2_questions.qmd
         text: HW2 Questions
+      - href: mnl_estimation.qmd
+        text: HW3 
 
 format:
   html:
