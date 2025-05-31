@@ -1,8 +1,8 @@
 
 ---
 title: "Multinomial Logit Model Estimation"
-author: "Your Name"
-date: today
+author: "Sarah Howard"
+date: May 2025
 format: html
 ---
 
