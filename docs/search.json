@@ -215,5 +215,40 @@
     "title": "Multinomial Logit Model Estimation",
     "section": "6. Discussion",
     "text": "6. Discussion\n\na. Parameter Interpretation\n\n\\(\\beta_{\\text{Netflix}} &gt; \\beta_{\\text{Prime}}\\) implies respondents prefer Netflix to Prime.\nA negative \\(\\beta_{\\text{Price}}\\) reflects rational behavior: higher prices lower utility.\n\n\n\nb. Real-World Estimation (No Simulation)\n\nAssess model fit with predictive accuracy.\nPosterior intervals help assess uncertainty in estimates.\n\n\n\nc. Extension to Hierarchical Bayes\n\nModel respondent-level parameters: \\(\\beta_i \\sim \\mathcal{N}(\\mu, \\Sigma)\\)\nEstimate hyperparameters \\((\\mu, \\Sigma)\\) across individuals.\nThis captures preference heterogeneity and is common in real-world conjoint analysis. /home/jovyan/git/MGTA 495 MARKETING ANALYTICS-howard/hw2_questions_files/libs"
+  },
+  {
+    "objectID": "hw4_questions.html",
+    "href": "hw4_questions.html",
+    "title": "Machine Learning",
+    "section": "",
+    "text": "todo: do two analyses. Do one of either 1a or 1b, AND one of either 2a or 2b."
+  },
+  {
+    "objectID": "hw4_questions.html#a.-k-means",
+    "href": "hw4_questions.html#a.-k-means",
+    "title": "Machine Learning",
+    "section": "1a. K-Means",
+    "text": "1a. K-Means\ntodo: write your own code to implement the k-means algorithm. Make plots of the various steps the algorithm takes so you can “see” the algorithm working. Test your algorithm on the Palmer Penguins dataset, specifically using the bill length and flipper length variables. Compare your results to the built-in kmeans function in R or Python.\ntodo: Calculate both the within-cluster-sum-of-squares and silhouette scores (you can use built-in functions to do so) and plot the results for various numbers of clusters (ie, K=2,3,…,7). What is the “right” number of clusters as suggested by these two metrics?\nIf you want a challenge, add your plots as an animated gif on your website so that the result looks something like this."
+  },
+  {
+    "objectID": "hw4_questions.html#b.-latent-class-mnl",
+    "href": "hw4_questions.html#b.-latent-class-mnl",
+    "title": "Machine Learning",
+    "section": "1b. Latent-Class MNL",
+    "text": "1b. Latent-Class MNL\ntodo: Use the Yogurt dataset to estimate a latent-class MNL model. This model was formally introduced in the paper by Kamakura & Russell (1989); you may want to read or reference page 2 of the pdf, which is described in the class slides, session 4, slides 56-57.\nThe data provides anonymized consumer identifiers (id), a vector indicating the chosen product (y1:y4), a vector indicating if any products were “featured” in the store as a form of advertising (f1:f4), and the products’ prices in price-per-ounce (p1:p4). For example, consumer 1 purchased yogurt 4 at a price of 0.079/oz and none of the yogurts were featured/advertised at the time of consumer 1’s purchase. Consumers 2 through 7 each bought yogurt 2, etc. You may want to reshape the data from its current “wide” format into a “long” format.\ntodo: Fit the standard MNL model on these data. Then fit the latent-class MNL on these data separately for 2, 3, 4, and 5 latent classes.\ntodo: How many classes are suggested by the \\(BIC = -2*\\ell_n  + k*log(n)\\)? (where \\(\\ell_n\\) is the log-likelihood, \\(n\\) is the sample size, and \\(k\\) is the number of parameters.) The Bayesian-Schwarz Information Criterion link is a metric that assess the benefit of a better log likelihood at the expense of additional parameters to estimate – akin to the adjusted R-squared for the linear regression model. Note, that a lower BIC indicates a better model fit, accounting for the number of parameters in the model.\ntodo: compare the parameter estimates between (1) the aggregate MNL, and (2) the latent-class MNL with the number of classes suggested by the BIC."
+  },
+  {
+    "objectID": "hw4_questions.html#a.-k-nearest-neighbors",
+    "href": "hw4_questions.html#a.-k-nearest-neighbors",
+    "title": "Machine Learning",
+    "section": "2a. K Nearest Neighbors",
+    "text": "2a. K Nearest Neighbors\ntodo: use the following code (or the python equivalent) to generate a synthetic dataset for the k-nearest neighbors algorithm. The code generates a dataset with two features, x1 and x2, and a binary outcome variable y that is determined by whether x2 is above or below a wiggly boundary defined by a sin function.\n\n# gen data -----\nset.seed(42)\nn &lt;- 100\nx1 &lt;- runif(n, -3, 3)\nx2 &lt;- runif(n, -3, 3)\nx &lt;- cbind(x1, x2)\n\n# define a wiggly boundary\nboundary &lt;- sin(4*x1) + x1\ny &lt;- ifelse(x2 &gt; boundary, 1, 0) |&gt; as.factor()\ndat &lt;- data.frame(x1 = x1, x2 = x2, y = y)\n\ntodo: plot the data where the horizontal axis is x1, the vertical axis is x2, and the points are colored by the value of y. You may optionally draw the wiggly boundary.\ntodo: generate a test dataset with 100 points, using the same code as above but with a different seed.\ntodo: implement KNN by hand. Check you work with a built-in function – eg, class::knn() or caret::train(method=\"knn\") in R, or scikit-learn’s KNeighborsClassifier in Python.\ntodo: run your function for k=1,…,k=30, each time noting the percentage of correctly-classified points from the test dataset. Plot the results, where the horizontal axis is 1-30 and the vertical axis is the percentage of correctly-classified points. What is the optimal value of k as suggested by your plot?"
+  },
+  {
+    "objectID": "hw4_questions.html#b.-key-drivers-analysis",
+    "href": "hw4_questions.html#b.-key-drivers-analysis",
+    "title": "Machine Learning",
+    "section": "2b. Key Drivers Analysis",
+    "text": "2b. Key Drivers Analysis\ntodo: replicate the table on slide 75 of the session 5 slides. Specifically, using the dataset provided in the file data_for_drivers_analysis.csv, calculate: pearson correlations, standardized regression coefficients, “usefulness”, Shapley values for a linear regression, Johnson’s relative weights, and the mean decrease in the gini coefficient from a random forest. You may use packages built into R or Python; you do not need to perform these calculations “by hand.”\nIf you want a challenge, add additional measures to the table such as the importance scores from XGBoost, from a Neural Network, or from any additional method that measures the importance of variables."
   }
 ]
