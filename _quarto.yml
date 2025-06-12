@@ -11,7 +11,7 @@ website:
         text: Resume
       - href: hw1_questions.qmd
         text: HW1 Questions
-      - href: hw2_questions.qmd
+      - href: HW2.qmd
         text: HW2 Questions
       - href: mnl_estimation.qmd
         text: HW3 Questions
