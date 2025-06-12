@@ -11,11 +11,11 @@ website:
         text: Resume
       - href: hw1_questions.qmd
         text: HW1 Questions
-      - href: HW2.qmd
+      - href: HW2.html
         text: HW2 Questions
       - href: mnl_estimation.qmd
         text: HW3 Questions
-      - href: hw4_questions.qmd
+      - href: hw4_questions.html
         text: Machine Learning
 
 format:
