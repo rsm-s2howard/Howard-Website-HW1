@@ -248,6 +248,7 @@ This section aimed to estimate both a standard Multinomial Logit (MNL) model and
 ### CONCLUSION
 While the standard MNL captures average effects, the latent-class MNL uncovers deeper heterogeneity in consumer choice. This richer model provides actionable insights for segmentation and targeted marketing.
 
+#check publish
 
 
 
